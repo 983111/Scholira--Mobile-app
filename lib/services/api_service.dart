@@ -52,7 +52,7 @@ class ApiService {
     }
   }
 
-  // Fallback data to match your screenshots exactly
+  // Fallback data 
   List<Scholarship> _getMockData() {
     return [
       Scholarship(
