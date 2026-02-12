@@ -5,24 +5,10 @@ import '../services/api_service.dart';
 import '../widgets/scholarship_card.dart';
 import 'profile_screen.dart';
 
-// Wrapper to handle Bottom Navigation
 class MainNavigationWrapper extends StatefulWidget {
-  final String gpa;
-  final String sat;
-  final String toefl;
-  final String educationLevel;
-  final String fieldOfStudy;
+  final String gpa, sat, toefl, educationLevel, fieldOfStudy;
   final List<String> targetCountries;
-
-  const MainNavigationWrapper({
-    super.key,
-    required this.gpa,
-    required this.sat,
-    required this.toefl,
-    required this.educationLevel,
-    required this.fieldOfStudy,
-    required this.targetCountries,
-  });
+  const MainNavigationWrapper({super.key, required this.gpa, required this.sat, required this.toefl, required this.educationLevel, required this.fieldOfStudy, required this.targetCountries});
 
   @override
   State<MainNavigationWrapper> createState() => _MainNavigationWrapperState();
@@ -36,14 +22,7 @@ class _MainNavigationWrapperState extends State<MainNavigationWrapper> {
   void initState() {
     super.initState();
     _screens = [
-      HomeScreen(
-        gpa: widget.gpa,
-        sat: widget.sat,
-        toefl: widget.toefl,
-        educationLevel: widget.educationLevel,
-        fieldOfStudy: widget.fieldOfStudy,
-        targetCountries: widget.targetCountries,
-      ),
+      HomeScreen(gpa: widget.gpa, sat: widget.sat, toefl: widget.toefl, educationLevel: widget.educationLevel, fieldOfStudy: widget.fieldOfStudy, targetCountries: widget.targetCountries),
       const Center(child: Text("Saved (Coming Soon)")),
       const ProfileScreen(),
     ];
@@ -53,37 +32,33 @@ class _MainNavigationWrapperState extends State<MainNavigationWrapper> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _screens[_currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (i) => setState(() => _currentIndex = i),
-        selectedItemColor: AppColors.primary,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.bookmark), label: "Saved"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
-        ],
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, -5))]
+        ),
+        child: BottomNavigationBar(
+          currentIndex: _currentIndex,
+          onTap: (i) => setState(() => _currentIndex = i),
+          selectedItemColor: AppColors.primary,
+          unselectedItemColor: Colors.grey[400],
+          showSelectedLabels: false, showUnselectedLabels: false,
+          elevation: 0, backgroundColor: Colors.transparent,
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.home_rounded, size: 28), label: "Home"),
+            BottomNavigationBarItem(icon: Icon(Icons.bookmark_rounded, size: 28), label: "Saved"),
+            BottomNavigationBarItem(icon: Icon(Icons.person_rounded, size: 28), label: "Profile"),
+          ],
+        ),
       ),
     );
   }
 }
 
 class HomeScreen extends StatefulWidget {
-  final String gpa;
-  final String sat;
-  final String toefl;
-  final String educationLevel;
-  final String fieldOfStudy;
+  final String gpa, sat, toefl, educationLevel, fieldOfStudy;
   final List<String> targetCountries;
-
-  const HomeScreen({
-    super.key,
-    required this.gpa,
-    required this.sat,
-    required this.toefl,
-    required this.educationLevel,
-    required this.fieldOfStudy,
-    required this.targetCountries,
-  });
+  const HomeScreen({super.key, required this.gpa, required this.sat, required this.toefl, required this.educationLevel, required this.fieldOfStudy, required this.targetCountries});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -95,14 +70,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    // CALL THE API HERE
     _futureScholarships = ApiService().fetchScholarships(
-      gpa: widget.gpa,
-      sat: widget.sat,
-      toefl: widget.toefl,
-      educationLevel: widget.educationLevel,
-      fieldOfStudy: widget.fieldOfStudy,
-      targetCountries: widget.targetCountries,
+      gpa: widget.gpa, sat: widget.sat, toefl: widget.toefl, 
+      educationLevel: widget.educationLevel, fieldOfStudy: widget.fieldOfStudy, 
+      targetCountries: widget.targetCountries
     );
   }
 
@@ -112,42 +83,71 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: AppColors.background,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 20),
               // Header
-              const Row(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  CircleAvatar(backgroundColor: AppColors.primary, child: Text("S", style: TextStyle(color: Colors.white))),
-                  SizedBox(width: 10),
-                  Text("Scholira AI", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  const Row(children: [
+                    CircleAvatar(backgroundColor: AppColors.primary, radius: 18, child: Icon(Icons.school, color: Colors.white, size: 20)),
+                    SizedBox(width: 12),
+                    Text("EduFund AI", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.secondary)),
+                  ]),
+                  Icon(Icons.notifications_none_rounded, color: Colors.grey[400])
                 ],
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 24),
               
-              const Text("Matches for you", style: TextStyle(color: AppColors.textGrey, fontWeight: FontWeight.bold)),
-              const SizedBox(height: 10),
+              // Search Bar
+              Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      height: 50,
+                      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
+                      child: TextField(
+                        decoration: InputDecoration(
+                          hintText: "Search programs...",
+                          hintStyle: TextStyle(color: Colors.grey[400]),
+                          prefixIcon: Icon(Icons.search, color: Colors.grey[400]),
+                          border: InputBorder.none, contentPadding: const EdgeInsets.only(top: 12)
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Container(
+                    height: 50, width: 50,
+                    decoration: BoxDecoration(color: AppColors.secondary, borderRadius: BorderRadius.circular(16)),
+                    child: const Icon(Icons.tune, color: Colors.white, size: 20),
+                  )
+                ],
+              ),
+              
+              const SizedBox(height: 24),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: const [
+                  Text("FEATURED", style: TextStyle(color: AppColors.textGrey, fontWeight: FontWeight.bold, fontSize: 12, letterSpacing: 1)),
+                  Text("See all", style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold, fontSize: 14)),
+                ],
+              ),
+              const SizedBox(height: 16),
 
-              // Results List
+              // List
               Expanded(
                 child: FutureBuilder<List<Scholarship>>(
                   future: _futureScholarships,
                   builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (snapshot.hasError) {
-                      return Center(child: Text("Error loading data.\n${snapshot.error}", textAlign: TextAlign.center));
-                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return const Center(child: Text("No scholarships found matching your profile."));
-                    }
-
+                    if (snapshot.connectionState == ConnectionState.waiting) return const Center(child: CircularProgressIndicator(color: AppColors.primary));
+                    if (!snapshot.hasData || snapshot.data!.isEmpty) return const Center(child: Text("No scholarships found."));
+                    
                     return ListView.builder(
                       itemCount: snapshot.data!.length,
-                      itemBuilder: (context, index) {
-                        return ScholarshipCard(scholarship: snapshot.data![index]);
-                      },
+                      itemBuilder: (context, index) => ScholarshipCard(scholarship: snapshot.data![index]),
                     );
                   },
                 ),

@@ -1,33 +1,11 @@
-class Scholarship {
-  final String title;       // Mapped from 'name'
-  final String provider;    // Mapped from 'provider'
-  final String amount;      // Mapped from 'amount'
-  final String deadline;    // Mapped from 'deadline'
-  final String description; // Mapped from 'description'
-  final String location;    // Mapped from 'location'
-  final List<String> eligibility; // Mapped from 'eligibility' array
+import 'package:flutter/material.dart';
 
-  Scholarship({
-    required this.title,
-    required this.provider,
-    required this.amount,
-    required this.deadline,
-    required this.description,
-    required this.location,
-    required this.eligibility,
-  });
-
-  factory Scholarship.fromJson(Map<String, dynamic> json) {
-    return Scholarship(
-      title: json['name'] ?? 'Unknown Scholarship',
-      provider: json['provider'] ?? 'Unknown Provider',
-      amount: json['amount'] ?? 'Not specified',
-      deadline: json['deadline'] ?? 'Open',
-      description: json['description'] ?? '',
-      location: json['location'] ?? 'International',
-      eligibility: json['eligibility'] != null 
-          ? List<String>.from(json['eligibility']) 
-          : [],
-    );
-  }
+class AppColors {
+  static const Color primary = Color(0xFF4C4DDC); // The exact blue-purple from screens
+  static const Color secondary = Color(0xFF1E1E2C); // Dark text
+  static const Color background = Color(0xFFF8F9FD); // Very light blue-grey bg
+  static const Color surface = Colors.white;
+  static const Color textGrey = Color(0xFFA1A4B2);
+  static const Color success = Color(0xFF27AE60);
+  static const Color inputFill = Color(0xFFF2F3F7); // Light grey for text fields
 }
