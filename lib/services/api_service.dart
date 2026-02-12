@@ -18,13 +18,12 @@ class ApiService {
         "gpa": gpa,
         "sat": sat,
         "toefl": toefl,
-        "originCountry": "Uzbekistan", // Defaulting to match your screenshot persona
+        "originCountry": "Uzbekistan",
         "fieldOfStudy": fieldOfStudy.isEmpty ? "Computer Science" : fieldOfStudy,
         "studyLevel": educationLevel.isEmpty ? "Bachelor" : educationLevel,
         "targetRegion": targetCountries.isNotEmpty ? targetCountries.join(", ") : "USA, UK, Europe",
       };
 
-      print("Sending request to: $baseUrl");
       final response = await http.post(
         Uri.parse(baseUrl),
         headers: {
@@ -41,18 +40,14 @@ class ApiService {
           return list.map((json) => Scholarship.fromJson(json)).toList();
         }
       } 
-      // If status is not 200, fall through to mock data
-      print("API returned status: ${response.statusCode}");
+      
       return _getMockData();
       
     } catch (e) {
-      print("API Error (Falling back to mock data): $e");
-      // RETURN MOCK DATA ON ERROR so the app doesn't crash
       return _getMockData();
     }
   }
 
-  // Fallback data 
   List<Scholarship> _getMockData() {
     return [
       Scholarship(
